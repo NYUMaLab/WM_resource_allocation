@@ -1,4 +1,6 @@
-## Working memory resource allocation
+## Working memory resource allocation (archival copy)
+
+This is a Ma lab copy of the original GitHub repository and code base, kept here for archival purposes. Please go to https://github.com/aspenyoo/WM_resource_allocation for possible updates.
 
 This repository accompanies the paper *Strategic allocation of working memory resource* by Yoo, Klyszejko, Curtis, & Ma (2018, Sci Reports). [\[link\]](https://www.nature.com/articles/s41598-018-34282-1.pdf)
 
