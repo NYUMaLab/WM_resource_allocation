@@ -94,7 +94,8 @@ set(gca,'XTick',1:3,'XTickLabel',priorityVec)
 clear all; close all
 
 fixedrisk = [];
-colorMat = [1 0 0; 0 0 1; 0 0 0; 0 1 0];
+colorMat = [222 146 59; 194 201 54; 101 193 145]./255;
+% colorMat = [1 0 0; 0 0 1; 0 0 0; 0 1 0];
 modelorderVec = [3 2 4]; % the order the models should be plotted
 nModels = length(modelorderVec); % how many models you want to plot now
 modelnameVec = {'max points','flexible','proportional','min error'};
@@ -186,7 +187,7 @@ end
 
 %% FIG 2C/4B: EXP 1/2 TERNARY PLOT
 
-% clear all; close all
+clear all; close all
 expnumber = 1; % experiment number. change to toggle between experiments
 
 % load data
@@ -201,7 +202,8 @@ c1 = [1 0.5 1/3];
 c2 = [0 0.5 1/3];
 hlabels=terlabel('high','medium','low');
 set(h,'LineWidth',1)
-colorMat = [1 0 0; 0 0 1; 0 0 0];
+colorMat = [222 146 59; 194 201 54; 101 193 145]./255;
+% colorMat = [1 0 0; 0 0 1; 0 0 0];
 
 % define colors
 axis1 = colorMat(2,:);
@@ -209,10 +211,10 @@ axis2 = colorMat(1,:);
 axis3 = colorMat(3,:);
 grey = 0.7*ones(1,3);
 
-% make patch showing monotonic area
-x=0.5-c1*cos(pi/3)+c2/2;
-y=0.866-c1*sin(pi/3)-c2*cot(pi/6)/2;
-patch('Faces',[1 2 3],'Vertices',[x' y'],'FaceColor',grey,'FaceAlpha',0.3,'EdgeColor','none');
+% % make patch showing monotonic area
+% x=0.5-c1*cos(pi/3)+c2/2;
+% y=0.866-c1*sin(pi/3)-c2*cot(pi/6)/2;
+% patch('Faces',[1 2 3],'Vertices',[x' y'],'FaceColor',grey,'FaceAlpha',0.3,'EdgeColor','none');
 
 % change the color of the grid lines
 set(hg(:,1),'color',axis1)
@@ -353,7 +355,8 @@ clear all
 
 exppriorityVec = [0.6 0.3 0.1];
 nPriorities = length(exppriorityVec);
-colorMat = [0 0 0; 0 0 1; 1 0 0];
+colorMat = [222 146 59; 194 201 54; 101 193 145]./255;
+% colorMat = [0 0 0; 0 0 1; 1 0 0];
 
 expnumber = 2;
 load('exp2_cleandata.mat','data')
@@ -443,8 +446,10 @@ defaultplot
 %% FIG 4A: EXP 2 MODELING RESULTS
 
 clear all; close all
-colorMat = [1 0 0; 0 0 1; 0 0 0; 0 1 0];
-modelorderVec = [3 2 4 1]; % the order the models should be plotted
+colorMat = [222 146 59; 194 201 54; 101 193 145]./255;
+
+% colorMat = [1 0 0; 0 0 1; 0 0 0; 0 1 0];
+modelorderVec = [3 2 1 4]; % the order the models should be plotted
 nModels = length(modelorderVec); % how many models you want to plot now
 modelnameVec = {'Max Points','Flexible','Proportional','Min Error'};
 
@@ -632,7 +637,7 @@ for imodel = 1:nModels
         ylabel('circle size, r','FontSize',14);
     end
     set(ha(2*nModels+imodel),'XTick',0:6,'YTick',0:6,'XTickLabel',0:6,'YTickLabel',0:6);
-    
+    defaultplot;
     xlabel('error (dva)');
 end
 

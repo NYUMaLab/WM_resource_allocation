@@ -18,6 +18,14 @@ function [logflag, lb, ub, plb, pub, nonbcon] = loadconstraints(model,exppriorit
 
 if nargin < 3; is_wagerdata = 0; end
 
+% change values if fitting all conditions jointly
+if strcmp(model(1:3),'all'); 
+    model = model(5:end); 
+    allflag = 1;
+else
+    allflag = 0;
+end
+
 nPriorities = length(exppriorityVec); 
 
 % lower and upper bounds, logflags
@@ -26,6 +34,14 @@ ub = [50 10];
 plb = [0.5 0.01];
 pub = [10 1];
 logflag = [1 1];
+
+if (allflag) % if fitting all TMS conditions jointly
+    lb = lb([1 1 2]); % Jbar_total, Jbar_total, tau
+    ub = ub([1 1 2]);
+    plb = plb([1 1 2]);
+    pub = pub([1 1 2]);
+    logflag = logflag([1 1 2]);
+end
 
 if (is_wagerdata) % alpha beta
     lb = [lb 1e-5 1e-5];
@@ -36,12 +52,21 @@ if (is_wagerdata) % alpha beta
 end
 
 switch model
-    case 'flexible' % define p_high p_med for Flexible model
+    case {'flexible','stronghyp'} % define p_high p_med for Flexible model
         lb = [lb 1e-10.*ones(1,nPriorities-1)];
-        ub = [ub ones(1,nPriorities-1)];
+        ub = [ub ones(1,nPriorities-1)-eps];
         plb = [plb max([1e-10.*ones(1,nPriorities-1); exppriorityVec(1:end-1).*0.5])];
-        pub = [pub min([ones(1,nPriorities-1); exppriorityVec(1:end-1).*1.5])];
+        pub = [pub min([ones(1,nPriorities-1)-eps; exppriorityVec(1:end-1).*1.5])];
         logflag = [logflag zeros(1,nPriorities-1)];
+        
+        if (allflag) % if fitting all TMS conditions jointly
+            lb = [lb lb(end).*ones(1,nPriorities-1)]; 
+            ub = [ub ub(end).*ones(1,nPriorities-1)];
+            plb = [plb plb(end).*ones(1,nPriorities-1)];
+            pub = [pub pub(end).*ones(1,nPriorities-1)];
+            logflag = [logflag logflag(end).*ones(1,nPriorities-1)];
+        end
+        
     case 'min_error' % gamma for Minimizing Error model
         lb = [lb 1e-10];
         ub = [ub 10];
@@ -53,10 +78,18 @@ switch model
         nonbcon = [];
 end
 
+switch model
+    case 'stronghyp' % adds another jbar and p's to fit
+        lb = [lb 1e-5 1e-10.*ones(1,nPriorities-1)];
+        ub = [ub 50 ones(1,nPriorities-1)-eps];
+        plb = [plb 0.5 max([1e-10.*ones(1,nPriorities-1); exppriorityVec(1:end-1).*0.5])];
+        pub = [pub 10 min([ones(1,nPriorities-1)-eps; exppriorityVec(1:end-1).*1.5])];
+        logflag = [logflag 1 zeros(1,nPriorities-1)];
+end
+
 logflag = logical(logflag); 
 lb(logflag) = log(lb(logflag)); 
 ub(logflag) = log(ub(logflag)); 
 plb(logflag) = log(plb(logflag)); 
 pub(logflag) = log(pub(logflag)); 
-
 
